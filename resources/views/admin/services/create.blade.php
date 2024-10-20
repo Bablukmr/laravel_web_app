@@ -45,14 +45,16 @@
 
                             <div class="row">
                                 <div class="col-md-6">
-                                <lavel for="Image">Image</lavel>
-                                <div id="image" class="dropzone dz-clickable">
-                                <div class="dz-message needclick">
-                            <br>Drop File here or click <br> <br>
+                                    <lavel for="Image">Image</lavel>
+                                    <div id="image" class="dropzone dz-clickable">
+                                        <div class="dz-message needclick">
+                                            <br>Drop File here or click <br> <br>
+                                        </div>
+                                    </div>
+                                    <input type="file" name="image_id" id="image_id" />
+
                                 </div>
-                                </div>
-                                </div>
-                                <div class="col-md-6" >
+                                <div class="col-md-6">
                                     <lavel for="">Short Description</lavel>
                                     <textarea name="short_description" id="short_description" cols="30" rows="5" class="form-control"></textarea>
                                 </div>
@@ -67,4 +69,30 @@
         </div>
     </div>
 </section>
+@endsection
+
+
+@section('extrajs')
+<script type="text/javascript">
+    const dropzone = $("#image").dropzone({
+        init: function() {
+            this.on('addedfile', function(file) {
+                if (this.files.length > 1) {
+                    this.removeFile(this.files[0]); // Allow only one file to be uploaded
+                }
+            });
+        },
+        url: "", // Specify the URL for file upload
+        maxFiles: 1, // Maximum number of files
+        addRemoveLinks: true, // Allow removing files
+        acceptedFiles: "image/jpeg,image/png,image/gif", // Accepted file types
+        headers: {
+            'X-CSRF-TOKEN': $('meta[name="_token"]').attr('content') // CSRF token for Laravel
+        },
+        success: function(file, response) {
+            $("#image_id").val(response.id); // Store the response ID in a hidden input field
+        }
+    });
+</script>
+
 @endsection

@@ -120,7 +120,7 @@
             });
         });
     </script>
-
+    @yield('extrajs')
 </body>
 
 </html>
